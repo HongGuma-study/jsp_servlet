@@ -1,6 +1,6 @@
-package me.web.member;
+package me.java.member;
 
-import me.web.database.JDBCMgr;
+import me.java.database.JDBCMgr;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -52,7 +52,7 @@ public class MemberDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            JDBCMgr.close(rs, stmt, conn);
+            JDBCMgr.close(stmt, conn);
         }
         return member;
     }

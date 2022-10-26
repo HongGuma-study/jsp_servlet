@@ -41,8 +41,7 @@
     </div>
 
         <ul class="main__nav__next">
-<%--            <li>👉🏻<a href="non-login/login.jsp"><b>JDBC 예제로 이동</b></a></li>--%>
-            <li>👉🏻<a href="login.jsp"><b>JDBC 예제로 이동</b></a></li>
+            <li>👉🏻<a href="file/file.jsp"><b> FILE 예제로 이동</b></a></li>
         </ul>
 
 </main>
