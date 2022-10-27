@@ -2,6 +2,7 @@ package me.web.member;
 
 import me.web.database.JDBCMgr;
 
+import java.lang.reflect.Member;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

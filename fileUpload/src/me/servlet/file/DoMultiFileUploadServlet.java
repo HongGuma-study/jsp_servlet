@@ -4,6 +4,7 @@ import com.oreilly.servlet.MultipartRequest;
 import me.java.file.FileInfo;
 import me.java.file.FilePost;
 import me.java.file.CustomRenamePolicy;
+import me.java.file.FilePostDAO;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -26,7 +27,7 @@ public class DoMultiFileUploadServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession();
-        String userId  = "";
+        String userId = "";
         if (session.getAttribute("SESSION_ID") != null) {
             userId = (String) session.getAttribute("SESSION_ID");
         }
@@ -41,6 +42,11 @@ public class DoMultiFileUploadServlet extends HttpServlet {
         String encType = "UTF-8";
         int maxSize = 500 * 1024 * 1024; // 500mb (업로드할 파일 최대 크기)
 
+        // upload 디렉토리 생성
+        File dir = new File(fullPath);
+        if (!dir.exists()) {
+            dir.mkdir(); // make directory
+        }
 
         try {
             MultipartRequest multipartRequest
@@ -54,7 +60,7 @@ public class DoMultiFileUploadServlet extends HttpServlet {
             String title = "";
             Enumeration<?> parameterNames = multipartRequest.getParameterNames();
             if (parameterNames.hasMoreElements()) {
-                String name = (String)parameterNames.nextElement();
+                String name = (String) parameterNames.nextElement();
                 String value = multipartRequest.getParameter(name);
                 title = value;
             }
@@ -65,7 +71,7 @@ public class DoMultiFileUploadServlet extends HttpServlet {
             Enumeration<?> files = multipartRequest.getFileNames();
             while (files.hasMoreElements()) {
 
-                String name = (String)files.nextElement();
+                String name = (String) files.nextElement();
                 String filename = multipartRequest.getFilesystemName(name);
                 // 서버에 저장된 file 이름 반환
                 // 만약에 중복된 이름이 서버에 저장이 되어있을 경우에는 DefaultFileRenamePolicy에 의해 변경된 파일 이름 반환
@@ -87,8 +93,14 @@ public class DoMultiFileUploadServlet extends HttpServlet {
             filePost.setTitle(title);
             filePost.setFiles(fileInfoList);
 
-            session.setAttribute("filePost", filePost);
-            response.sendRedirect("./file/multiFileView.jsp");
+            FilePostDAO filePostDAO = FilePostDAO.getInstance();
+            int res = filePostDAO.insert(filePost);
+            if(res > 0){
+                session.setAttribute("filePost", filePost);
+                response.sendRedirect("./file/fileView.jsp");
+            }else{
+                response.sendRedirect("./file/multiFileSelect.jsp");
+            }
 
         } catch (FileNotFoundException e) {
             new RuntimeException();

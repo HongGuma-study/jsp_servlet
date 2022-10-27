@@ -7,7 +7,7 @@ public class JDBCDriverTest {
     public static void main(String[] args) {
         String driver = "org.h2.Driver";
         String url = "jdbc:h2:~/JDBC";
-        String user = "sa";
+        String user = "sa2";
         String password = "";
 
         try {
